@@ -80,57 +80,33 @@
       </nav>
 
       <section class="ticket-section section-padding">
-        <div class="section-overlay"></div>
-        <div class="container">
-          <div class="row">
-                <form
-                class="custom-form ticket-form mb-5 mb-lg-0"
-                action="eventRegistration"
-                method="post"
-                role="form">
-                <h2 class="text-center mb-4">Get started here</h2>
-
-                <div class="ticket-form-body">
-                  <div class="row">
-                    <div class="col-lg-6 col-md-6 col-12">
-                      <input
-                        type="text"
-                        name="ticket-show-name"
-                        id="ticket-show-name"
-                        class="form-control"
-                        placeholder="Show Name"
-                        required
-                      />
-                    </div>
-                    </div>
-                  </div>
-             
-                  <input
-                    type="text"
-                    name="ticket-timing"
-                    id="ticket-timing"
-                    class="form-control"
-                    placeholder="Time Duration"
-                    required
-                  />
-
-                  <textarea
-                    name="ticket-author"
-                    rows="3"
-                    class="form-control"
-                    id="ticket-author"
-                    placeholder="Author Name"
-                  ></textarea>
-
-                  <div class="col-lg-4 col-md-10 col-8 mx-auto">
-                    <button id="redirectWEB" type="submit" class="form-control">
-                      Buy Ticket
-                    </button>
-                  </div>
-                  </form>
-            </div>
-          </div>
-      </section>
+  		<div class="section-overlay"></div>
+		  <div class="container">
+		    <div class="row justify-content-center">
+		      <form class="custom-form ticket-form mb-5 mb-lg-0" action="eventRegistration" method="post" role="form">
+		        <h2 class="text-center mb-4">Event Registration</h2>
+		        <div class="ticket-form-body">
+		          <div class="row">
+		            <div class="col-lg-4 col-md-6 col-12 mb-3">
+		              <input type="text" name="ticket-show-name" id="ticket-show-name" class="form-control" placeholder="Show Name" required>
+		            </div>
+		            <div class="col-lg-4 col-md-6 col-12 mb-3">
+		              <input type="text" name="ticket-timing" id="ticket-timing" class="form-control" placeholder="Time Duration (xx:xx - x:xx AM/PM)" required>
+		            </div>
+		            <div class="col-lg-4 col-md-6 col-12 mb-3">
+		              <textarea name="ticket-author" rows="3" class="form-control" id="ticket-author" placeholder="Author Name"></textarea>
+		            </div>
+		          </div>
+		          <div class="row justify-content-center">
+		            <div class="col-lg-2 col-md-4 col-6">
+		              <button id="redirectWEB" type="submit" class="btn btn-primary form-control">Register</button>
+		            </div>
+		          </div>
+		        </div>
+		      </form>
+		    </div>
+		  </div>
+		</section>
     </main>
 
     <footer class="site-footer">
