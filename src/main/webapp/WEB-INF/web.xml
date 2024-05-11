@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://jakarta.ee/xml/ns/jakartaee" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" id="WebApp_ID" version="5.0">
+  <display-name>Event_Carnival</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>EventRegistration</display-name>
+    <servlet-name>EventRegistration</servlet-name>
+    <servlet-class>RegisterEvent.EventRegistration</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EventRegistration</servlet-name>
+    <url-pattern>/eventRegistration</url-pattern>
+  </servlet-mapping>
+</web-app>
