@@ -71,7 +71,7 @@
                 <a class="nav-link click-scroll" href="index.jsp#section_6">Contact</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link click-scroll" href="event.jsp">Ticket Book</a>
+                <a class="nav-link click-scroll" href="event.jsp">Event Booking</a>
               </li>
             </ul>
             <a href="ticket.jsp" class="btn custom-btn d-lg-block d-none">Buy Ticket</a>

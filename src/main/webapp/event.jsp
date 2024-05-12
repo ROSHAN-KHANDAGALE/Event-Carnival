@@ -71,7 +71,7 @@
                 <a class="nav-link click-scroll" href="index.jsp#section_6">Contact</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link click-scroll" href="event.jsp">Ticket Book</a>
+                <a class="nav-link click-scroll" href="event.jsp">Event Booking</a>
               </li>
             </ul>
             <a href="ticket.jsp" class="btn custom-btn d-lg-block d-none">Buy Ticket</a>
@@ -83,10 +83,16 @@
   		<div class="section-overlay"></div>
 		  <div class="container">
 		    <div class="row justify-content-center">
-		      <form class="custom-form ticket-form mb-5 mb-lg-0" action="eventRegistration" method="post" role="form">
+		      <form class="custom-form ticket-form mb-5 mb-lg-0" action="eventRegistration" method="post" role="form" enctype="multipart/form-data">
 		        <h2 class="text-center mb-4">Event Registration</h2>
 		        <div class="ticket-form-body">
 		          <div class="row">
+		          	<div class="col-lg-4 col-md-6 col-12 mb-3">
+		              <input type="text" name="ticket-show-date" id="ticket-show-date" class="form-control" placeholder="Event Date (Day 1, Day 2, etc..)" required>
+		            </div>
+		            <div class="col-lg-4 col-md-6 col-12 mb-3">
+		              <input type="text" name="ticket-show-day" id="ticket-show-day" class="form-control" placeholder="Event Day (Sunday... Saturday)" required>
+		            </div>
 		            <div class="col-lg-4 col-md-6 col-12 mb-3">
 		              <input type="text" name="ticket-show-name" id="ticket-show-name" class="form-control" placeholder="Show Name" required>
 		            </div>
@@ -94,8 +100,11 @@
 		              <input type="text" name="ticket-timing" id="ticket-timing" class="form-control" placeholder="Time Duration (xx:xx - x:xx AM/PM)" required>
 		            </div>
 		            <div class="col-lg-4 col-md-6 col-12 mb-3">
-		              <textarea name="ticket-author" rows="3" class="form-control" id="ticket-author" placeholder="Author Name"></textarea>
+		              <input type="text" name="ticket-author" id="ticket-author" class="form-control" placeholder="Author Name" required>
 		            </div>
+		            <div class="col-lg-4 col-md-6 col-12 mb-3">
+			            <input type="file" name="ticket-image" id="ticket-image" class="form-control" accept="image/*" required>
+			        </div>
 		          </div>
 		          <div class="row justify-content-center">
 		            <div class="col-lg-2 col-md-4 col-6">

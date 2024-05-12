@@ -1,3 +1,9 @@
+<%@page import="java.util.Base64"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -19,6 +25,19 @@
     <link href="css/bootstrap-icons.css" rel="stylesheet">
     <link href="css/templatemo-festava-live.css" rel="stylesheet">
     
+    <!-- Script to update the Schedule Table after 24 hours -->
+    <script>
+        function checkUpdate() {
+            var currentTime = new Date();
+            var lastUpdate = new Date("<%= request.getSession().getAttribute("lastUpdate") %>");
+            lastUpdate.setDate(lastUpdate.getDate() + 1);
+            
+            if (currentTime >= lastUpdate) {
+                location.reload();
+            }
+        }
+        setInterval(checkUpdate, 60000); 
+    </script>
 </head>
 <body>    
     <main>
@@ -49,7 +68,7 @@
                             <a class="nav-link click-scroll" href="#section_6">Contact</a>
                         </li>
                         <li class="nav-item">
-                			<a class="nav-link click-scroll" href="event.jsp">Ticket Book</a>
+                			<a class="nav-link click-scroll" href="event.jsp">Event Booking</a>
              			</li>
                     </ul>
                     <a href="ticket.jsp" class="btn custom-btn d-lg-block d-none">Buy Ticket</a>
@@ -240,8 +259,16 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12 text-center">
-                        <h2 class="text-white mb-4">Event Schedule</h1>
+                        <h2 class="text-white mb-4">Event Schedule</h2>
                             <div class="table-responsive">
+                                <%
+								try {
+								    Class.forName("com.mysql.jdbc.Driver");
+								    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Event", "root", "Root@123");
+								    String query = "SELECT * FROM EventRegistration";
+								    Statement statement = con.createStatement();
+								    ResultSet resultSet = statement.executeQuery(query);
+								%>
                                 <table id="schedule-table" class="schedule-table table table-dark">
                                     <thead>
                                         <tr>
@@ -251,96 +278,38 @@
                                             <th scope="col">Tuesday</th>
                                             <th scope="col">Wednesday</th>
                                             <th scope="col">Thursday</th>
+                                            <th scope="col">Friday</th>
                                             <th scope="col">Saturday</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">Day 1</th>
-                                            <td class="table-background-image-wrap pop-background-image">
-                                                <h3>Pop Night</h3>
-                                                    <p class="mb-2">5:00 - 7:00 PM</p>
-                                                    <p>By Roshan Khandagale</p>
-                                                    <div class="section-overlay"></div>
-                                            </td>
-
-                                            <td style="background-color: #F3DCD4"></td>
-                                            <td class="table-background-image-wrap StudyAI">
-                                                <h3>Core Artifical Intelligence</h3>
-                                                    <p class="mb-2">10:00 - 12:30 AM</p>
-                                                    <p>By Omkar Patankar</p>
-                                                    <div class="section-overlay"></div>
-                                            </td>
-                                            <td style="background-color: #F3DCD4"></td>
-                                            <td class="table-background-image-wrap English">
-                                                <h3>English Literature</h3>
-                                                    <p class="mb-2">12:00 - 3:00 PM</p>
-                                                    <p>By Gaurov Kayarkar</p>
-                                                    <div class="section-overlay"></div>
-                                            </td>
-                                            <td class="table-background-image-wrap rock-background-image">
-                                                <h3>Live Telecast</h3>
-                                                    <p class="mb-2">7:00 - 11:00 PM</p>
-                                                    <p>By Akira Toriyama</p>
-                                                    <div class="section-overlay"></div>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">Day 2</th>
-                                            <td style="background-color: #F3DCD4"></td>
-                                            <td class="table-background-image-wrap pop-background-image">
-                                                <h3>DJ Night</h3>
-                                                    <p class="mb-2">6:30 - 9:30 PM</p>
-                                                    <p>By Rihana</p>
-                                            </td>
-                                            <td style="background-color: #F3DCD4"></td>
-                                            <td class="table-background-image-wrap java">
-                                                <h3>Core Java</h3>
-                                                    <p class="mb-2">7:00 - 11:00 PM</p>
-                                                    <p>By Pratiksha Wadgure</p>
-                                                    <div class="section-overlay"></div>
-                                            </td>
-                                            <td class="table-background-image-wrap English">
-                                                <h3>English Literature</h3>
-                                                    <p class="mb-2">12:00 - 3:00 PM</p>
-                                                    <p>By Gaurov Kayarkar</p>
-                                                    <div class="section-overlay"></div>
-                                            </td>
-                                            <td style="background-color: #F3DCD4"></td>
-                                        </tr>
-
-                                        <tr>
-                                            <th scope="row">Day 3</th>
-                                        <td class="table-background-image-wrap music">
-                                            <h3>Music Concert</h3>
-                                                <p class="mb-2">4:30 - 7:30 PM</p>
-                                                <p>By Roshan Khandagale</p>
-                                                <div class="section-overlay"></div>
-                                        <td class="table-background-image-wrap NarutophotoAnime">
-                                            <h3>Live Broadcast</h3>
-                                                <p class="mb-2">7:00 - 11:00 PM</p>
-                                                <p>By Masashi Kishimoto</p>
-                                                <div class="section-overlay"></div>
-                                        </td>
-                                        <td class="table-background-image-wrap java">
-                                            <h3>Core Java</h3>
-                                                <p class="mb-2">7:00 - 11:00 PM</p>
-                                                <p>By Pratiksha Wadgure</p>
-                                                <div class="section-overlay"></div>
-                                        </td>
-                                            <td style="background-color: #F3DCD4"></td>
-                                        </td>
-                                        <td class="table-background-image-wrap English">
-                                            <h3>English Literature</h3>
-                                                <p class="mb-2">12:00 - 3:00 PM</p>
-                                                <p>By Gaurov Kayarkar</p>
-                                                <div class="section-overlay"></div>    
-                                        </td>
-                                            <td style="background-color: #F3DCD4"></td>
-                                    </tr>
+                                        <% while (resultSet.next()) { 
+                                        	byte[] imageData = resultSet.getBytes("Image");
+                                            String base64Image = Base64.getEncoder().encodeToString(imageData);
+                                        %>
+									        <tr>
+									            <td><%= resultSet.getString("Date") %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Sunday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"> <%= resultSet.getString("Day").equals("Monday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Tuesday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"> <%= resultSet.getString("Day").equals("Wednesday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Thursday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Friday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Saturday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									        </tr>
+        								<% } %>
                                 </tbody>
                                 </table>
+                                <%
+                             		// Set session attribute to store the last update time
+                                	request.getSession().setAttribute("lastUpdate", new java.util.Date());
+									resultSet.close();
+									statement.close();
+									con.close();
+									} catch (SQLException e) {
+									    e.printStackTrace();
+									}
+								%>
                         </div>
                     </div>
                 </div>
