@@ -70,9 +70,6 @@
               <li class="nav-item">
                 <a class="nav-link click-scroll" href="index.jsp#section_6">Contact</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link click-scroll" href="event.jsp">Event Booking</a>
-              </li>
             </ul>
             <a href="ticket.jsp" class="btn custom-btn d-lg-block d-none">Buy Ticket</a>
           </div>
@@ -80,42 +77,46 @@
       </nav>
 
       <section class="ticket-section section-padding">
-  		<div class="section-overlay"></div>
-		  <div class="container">
-		    <div class="row justify-content-center">
-		      <form class="custom-form ticket-form mb-5 mb-lg-0" action="eventRegistration" method="post" role="form" enctype="multipart/form-data">
-		        <h2 class="text-center mb-4">Event Registration</h2>
-		        <div class="ticket-form-body">
-		          <div class="row">
-		          	<div class="col-lg-4 col-md-6 col-12 mb-3">
-		              <input type="text" name="ticket-show-date" id="ticket-show-date" class="form-control" placeholder="Event Date (Day 1, Day 2, etc..)" required>
-		            </div>
-		            <div class="col-lg-4 col-md-6 col-12 mb-3">
-		              <input type="text" name="ticket-show-day" id="ticket-show-day" class="form-control" placeholder="Event Day (Sunday... Saturday)" required>
-		            </div>
-		            <div class="col-lg-4 col-md-6 col-12 mb-3">
-		              <input type="text" name="ticket-show-name" id="ticket-show-name" class="form-control" placeholder="Show Name" required>
-		            </div>
-		            <div class="col-lg-4 col-md-6 col-12 mb-3">
-		              <input type="text" name="ticket-timing" id="ticket-timing" class="form-control" placeholder="Time Duration (xx:xx - x:xx AM/PM)" required>
-		            </div>
-		            <div class="col-lg-4 col-md-6 col-12 mb-3">
-		              <input type="text" name="ticket-author" id="ticket-author" class="form-control" placeholder="Author Name" required>
-		            </div>
-		            <div class="col-lg-4 col-md-6 col-12 mb-3">
-			            <input type="file" name="ticket-image" id="ticket-image" class="form-control" accept="image/*" required>
-			        </div>
-		          </div>
-		          <div class="row justify-content-center">
-		            <div class="col-lg-2 col-md-4 col-6">
-		              <button id="redirectWEB" type="submit" class="btn btn-primary form-control">Register</button>
-		            </div>
-		          </div>
-		        </div>
-		      </form>
-		    </div>
-		  </div>
-		</section>
+    <div class="section-overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <form class="custom-form ticket-form mb-5 mb-lg-0" action="eventRegistration" method="post" role="form" enctype="multipart/form-data">
+                <h2 class="text-center mb-4">Event Registration</h2>
+                <div class="ticket-form-body">
+                    <div class="row justify-content-center">
+                        <div class="col-4 mb-3">
+                            <input type="text" name="ticket-show-date" id="ticket-show-date" class="form-control" placeholder="Event Date (YYYY-MM-DD)" required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <input type="text" name="ticket-show-name" id="ticket-show-name" class="form-control" placeholder="Event Name" required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <input type="text" name="ticket-timing" id="ticket-timing" class="form-control" placeholder="Time Duration (xx:xx - x:xx AM/PM)" required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <input type="text" name="ticket-author" id="ticket-author" class="form-control" placeholder="Host/ Organizers Name" required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <input type="text" name="total-ticket" id="total-ticket" class="form-control" placeholder="Total Tickets" required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <input type="text" name="ticket-price" id="ticket-price" class="form-control" placeholder="Ticket Price" required>
+                        </div>
+                        <div class="col-4 mb-3">
+                            <input type="file" name="ticket-image" id="ticket-image" class="form-control" accept="image/*" required>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-2 col-md-4 col-6">
+                            <button id="redirectWEB" type="submit" class="btn btn-primary form-control">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
     </main>
 
     <footer class="site-footer">
@@ -176,6 +177,9 @@
               <li class="site-footer-link-item">
                 <a href="index.jsp#section_6" class="site-footer-link">Contact</a>
               </li>
+              <li class="site-footer-link-item">
+                <a href="event.jsp" class="site-footer-link">Event Booking</a>
+              </li>
             </ul>
           </div>
 
@@ -186,14 +190,16 @@
                 +91 - 7448255689
               </a>
             </p>
+            
+              <p class="text-white d-flex mb-1">
+              <a href="tel: 7387970984" class="site-footer-link">
+                +91 - 7387970984
+              </a>
+            </p>
+            
             <p class="text-white d-flex mb-1">
               <a href="tel: 9356560211" class="site-footer-link">
                 +91 - 9356560211
-              </a>
-            </p>
-            <p class="text-white d-flex mb-1">
-              <a href="tel: 7387970984" class="site-footer-link">
-                +91 - 7387970984
               </a>
             </p>
 
@@ -264,7 +270,7 @@
       document
         .getElementById("redirectWEB")
         .addEventListener("click", function () {
-          window.location.href = "index.jsp";
+          window.location.href = "index.jsp#section_4";
         });
     </script>
   </body>

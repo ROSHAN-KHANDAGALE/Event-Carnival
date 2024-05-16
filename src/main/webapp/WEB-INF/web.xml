@@ -15,4 +15,14 @@
     <servlet-name>EventRegistration</servlet-name>
     <url-pattern>/eventRegistration</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>TicketServlet</display-name>
+    <servlet-name>TicketServlet</servlet-name>
+    <servlet-class>Ticket.TicketServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TicketServlet</servlet-name>
+    <url-pattern>/ticketServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

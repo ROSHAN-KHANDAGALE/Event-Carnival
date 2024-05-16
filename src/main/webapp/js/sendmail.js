@@ -11,6 +11,11 @@
       const userCompany = document.getElementById("contact-company").value;
       const userMessage = document.getElementById("contact-message").value;
 
+      // Generate Meet link
+      const roomID = getUrlParams(window.location.href)['roomID'] || (Math.floor(Math.random() * 10000) + "");
+      const role = 'Audience'; // Set role as Audience for email recipients
+      const meetLink = generateMeetLink(roomID, role);
+
       // Send email using EmailJS
       emailjs
         .send("service_kifkfrc", "template_g6lgv8e", {
@@ -18,6 +23,7 @@
           from_email: userEmail,
           from_company: userCompany,
           message: userMessage,
+          meet_link: meetLink, // Pass Meet link as a parameter
         })
         .then(
           function (response) {
@@ -32,6 +38,17 @@
           }
         );
     });
+
+  // Function to generate Meet link
+  function generateMeetLink(roomID, role) {
+    return window.location.protocol + '//' +
+      window.location.host +
+      window.location.pathname +
+      '?roomID=' +
+      roomID +
+      '&role=' +
+      role;
+  }
 
   // Function to show success toast
   function showSuccessToast(message) {

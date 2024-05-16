@@ -31,10 +31,11 @@ public class EventRegistration extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		
 		String ShowDate = request.getParameter("ticket-show-date");
-		String ShowDay = request.getParameter("ticket-show-day");
 		String Name = request.getParameter("ticket-show-name");
 		String Timing = request.getParameter("ticket-timing");
 		String Author = request.getParameter("ticket-author");
+		String TotalTicket = request.getParameter("total-ticket");
+		String TicketPrice = request.getParameter("ticket-price");
 		Part imagePart = request.getPart("ticket-image");
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		byte[] buffer = new byte[4096];
@@ -51,13 +52,14 @@ public class EventRegistration extends HttpServlet {
 		try {
 		    Class.forName("com.mysql.jdbc.Driver");
 		    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Event", "root", "Root@123");
-		    PreparedStatement pst = con.prepareStatement("Insert into EventRegistration(DATE, Day, ShowName, Timing, Author, Image) values(?,?,?,?,?,?)");
+		    PreparedStatement pst = con.prepareStatement("Insert into EventRegistration(Event_Date, Event_Name, Event_Timing, Event_Host, TotalTickets, TicketPrice, Event_Image) values(?,?,?,?,?,?,?)");
 		    pst.setString(1, ShowDate);
-            pst.setString(2, ShowDay);
-            pst.setString(3, Name);
-            pst.setString(4, Timing);
-            pst.setString(5, Author);
-            pst.setBytes(6, imageData);
+            pst.setString(2, Name);
+            pst.setString(3, Timing);
+            pst.setString(4, Author);
+            pst.setString(5, TotalTicket);
+            pst.setString(6, TicketPrice);
+            pst.setBytes(7, imageData);
             int rowsAffected = pst.executeUpdate();
 		    if (rowsAffected > 0) {
 		        response.sendRedirect("index.jsp");

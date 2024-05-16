@@ -1,9 +1,10 @@
-<%@page import="java.util.Base64"%>
-<%@page import="java.sql.SQLException"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.sql.Connection"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.util.Base64"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -25,22 +26,54 @@
     <link href="css/bootstrap-icons.css" rel="stylesheet">
     <link href="css/templatemo-festava-live.css" rel="stylesheet">
     
-    <!-- Script to update the Schedule Table after 24 hours -->
-    <script>
-        function checkUpdate() {
-            var currentTime = new Date();
-            var lastUpdate = new Date("<%= request.getSession().getAttribute("lastUpdate") %>");
-            lastUpdate.setDate(lastUpdate.getDate() + 1);
-            
-            if (currentTime >= lastUpdate) {
-                location.reload();
-            }
-        }
-        setInterval(checkUpdate, 60000); 
-    </script>
+    <!-- CSS Styling -->
+    <style type="text/css">
+		.sponsor-card {
+		    transition: transform 0.3s ease;
+		}
+		
+		.sponsor-card:hover {
+		    transform: translateY(-5px);
+		}
+		
+		@keyframes glow {
+	        0% { box-shadow: 0 0 5px #fff; }
+	        50% { box-shadow: 0 0 20px #ffcc00; }
+	        100% { box-shadow: 0 0 5px #fff; }
+	    }
+    
+	    .btn.custom-btn:hover {
+	        transform: scale(1.1);
+	    }
+	
+	    .btn.custom-btn span {
+	        position: relative;
+	        z-index: 1;
+	    }
+			
+			.glow-animation {
+	        animation: glow 2s infinite alternate;
+	    }
+		
+    </style>
+    
 </head>
 <body>    
     <main>
+      <header class="site-header">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 col-12 d-flex flex-wrap">
+              <p class="d-flex me-4 mb-0">
+                <i class="bi-person custom-icon me-2"></i>
+                <strong class="text-dark"
+                  >Welcome to Event Carnival Live
+                </strong>
+              </p>
+            </div>
+          </div>
+        </div>
+      </header>
         <nav class="navbar navbar-expand-lg">
             <div class="container">
                 <a class="navbar-brand" href="index.jsp">
@@ -62,16 +95,13 @@
                             <a class="nav-link click-scroll" href="#section_4">Schedule</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_5">Pricing</a>
+                            <a class="nav-link click-scroll" href="#section_5">Sponsor's</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link click-scroll" href="#section_6">Contact</a>
                         </li>
-                        <li class="nav-item">
-                			<a class="nav-link click-scroll" href="event.jsp">Event Booking</a>
-             			</li>
                     </ul>
-                    <a href="ticket.jsp" class="btn custom-btn d-lg-block d-none">Buy Ticket</a>
+                    
                 </div>
             </div>
         </nav>
@@ -80,11 +110,14 @@
             <div class="section-overlay"></div>
             <div class="container d-flex justify-content-center align-items-center">
                 <div class="row">
-                    <div class="col-12 mt-auto mb-5 text-center">
-                        <small>Event Carnival Live Presents</small>
-                        <h1 class="text-white mb-5">" Bringing the World Together!! "</h1>
-                        <a class="btn custom-btn smoothscroll" href="#section_2">Let's begin</a>
-                    </div>
+                    <div class="col-12 mt-auto mb-4 text-center">
+		                <small>Event Carnival Live Presents</small>
+		                <h1 class="text-white mb-5">"Bringing the World Together!!"</h1>
+		                <a class="btn custom-btn smoothscroll" href="ticket.jsp">Let's begin</a>
+		            </div>
+		            <div class="col-12 text-center">
+		                <a class="btn custom-btn smoothscroll glow-animation" href="event.jsp"><span>Event Booking</span></a>
+		            </div>
 
                     <div class="col-lg-12 col-12 mt-auto d-flex flex-column flex-lg-row text-center">
                         <div class="date-wrap">
@@ -255,133 +288,307 @@
         </section>
 
 <!-- SCHEDULE SECTION -->
-        <section class="schedule-section section-padding" id="section_4">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <h2 class="text-white mb-4">Event Schedule</h2>
-                            <div class="table-responsive">
-                                <%
-								try {
-								    Class.forName("com.mysql.jdbc.Driver");
-								    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Event", "root", "Root@123");
-								    String query = "SELECT * FROM EventRegistration";
-								    Statement statement = con.createStatement();
-								    ResultSet resultSet = statement.executeQuery(query);
-								%>
-                                <table id="schedule-table" class="schedule-table table table-dark">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Sunday</th>
-                                            <th scope="col">Monday</th>
-                                            <th scope="col">Tuesday</th>
-                                            <th scope="col">Wednesday</th>
-                                            <th scope="col">Thursday</th>
-                                            <th scope="col">Friday</th>
-                                            <th scope="col">Saturday</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% while (resultSet.next()) { 
-                                        	byte[] imageData = resultSet.getBytes("Image");
-                                            String base64Image = Base64.getEncoder().encodeToString(imageData);
-                                        %>
+<section class="schedule-section section-padding" id="section_4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white mb-4">Event Schedule</h2>
+                <!-- Nav tabs -->
+                <nav class="d-flex justify-content-center">
+				    <div class="nav nav-tabs justify-content-center" id="eventTabs" role="tablist" style="background-color: rgba(45, 45, 45, 0.9);">
+				        
+				        <button class="nav-link" id="previous-tab" data-bs-toggle="tab" data-bs-target="#previous" type="button" role="tab" aria-controls="previous" aria-selected="false">
+				            <h5>Previous</h5>
+				        </button>
+				        
+				        <button class="nav-link active" id="latest-tab" data-bs-toggle="tab" data-bs-target="#latest" type="button" role="tab" aria-controls="latest" aria-selected="true">
+				            <h5>Latest Event</h5>
+				        </button>
+				
+				        <button class="nav-link" id="upcoming-tab" data-bs-toggle="tab" data-bs-target="#upcoming" type="button" role="tab" aria-controls="upcoming" aria-selected="false">
+				            <h5>Upcoming</h5>
+				        </button>
+				        
+				    </div>
+				</nav>
+
+                <!-- Tab panes -->
+                <div class="tab-content" id="eventTabsContent" style="background-color: rgba(39, 39, 39, 0.1);">
+                    <div class="tab-pane fade show active" id="latest" role="tabpanel" aria-labelledby="latest-tab">
+                        <!-- Latest event schedule table -->
+                        <div class="table-responsive">
+                            <%
+									try {
+									    Class.forName("com.mysql.jdbc.Driver");
+									    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Event", "root", "Root@123");
+									    String query = "SELECT * FROM EventRegistration WHERE Event_Date = ?";
+									    PreparedStatement statement = con.prepareStatement(query);
+									    LocalDate currentDate = LocalDate.now();
+									    String today = currentDate.toString();
+									    statement.setString(1, today);
+									    ResultSet resultSet = statement.executeQuery();
+									%>
+									<table id="schedule-table" class="schedule-table table table-dark">
+									    <thead>
 									        <tr>
-									            <td><%= resultSet.getString("Date") %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Sunday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"> <%= resultSet.getString("Day").equals("Monday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Tuesday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"> <%= resultSet.getString("Day").equals("Wednesday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Thursday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Friday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
-									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>');"><%= resultSet.getString("Day").equals("Saturday") ? resultSet.getString("ShowName") + " " + resultSet.getString("Timing") + " " + resultSet.getString("Author") : "" %></td>
+									            <th scope="col">Date</th>
+									            <th scope="col">Event</th>
+									            <th scope="col">Time</th>
+									            <th scope="col">Host / Organizer's</th>
+									            <th scope="col">JOIN</th>
 									        </tr>
-        								<% } %>
-                                </tbody>
-                                </table>
-                                <%
-                             		// Set session attribute to store the last update time
-                                	request.getSession().setAttribute("lastUpdate", new java.util.Date());
+									    </thead>
+									    <tbody>
+									        <% 
+									        while (resultSet.next()) { 
+									            String eventDay = resultSet.getString("Event_Date");
+									            byte[] imageData = resultSet.getBytes("Event_Image");
+									            String base64Image = Base64.getEncoder().encodeToString(imageData);
+									            
+									            String imageSize = "cover";
+									            
+									            int numColumns = 7;
+									            int imageWidth = 100 / numColumns;
+									        %>
+									        <tr>
+									            <td style="background-color: #FFFF; color: green; font-weight: bold;"><%= resultSet.getString("Event_Date") %></td>
+									            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>'); background-size: <%= imageSize %>; background-repeat: no-repeat; background-position: center; font-weight: bold; color: #FFFF; width: <%= imageWidth %>%;"><%= resultSet.getString("Event_Name") %></td>
+									            <td style="background-color: #FFFF; color: red; font-weight: bold;"><%= resultSet.getString("Event_Timing") %></td>
+									            <td style="background-color: #FFFF; color: black; font-weight: bold;"><%= resultSet.getString("Event_Host") %></td>
+									            <td style="background-color: #FFFF; color: black; font-weight: bold;">
+												    <a href="ticket.jsp?Event_Name=<%= resultSet.getString("Event_Name") %>&Event_Date=<%= resultSet.getString("Event_Date") %>&Event_Timing=<%= resultSet.getString("Event_Timing") %>&Event_Host=<%= resultSet.getString("Event_Host") %>" class="btn btn-primary">Join Event</a>
+												</td>
+									        </tr>
+									        <% } %>
+									    </tbody>
+									</table>
+								<%
 									resultSet.close();
 									statement.close();
 									con.close();
-									} catch (SQLException e) {
+									} catch (SQLException | ClassNotFoundException e) {
 									    e.printStackTrace();
 									}
 								%>
                         </div>
                     </div>
+                    
+                    <div class="tab-pane fade" id="upcoming" role="tabpanel" aria-labelledby="upcoming-tab">
+                        <div class="table-responsive">
+                          <%
+                                try {
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Event", "root", "Root@123");
+                                    String query = "SELECT * FROM EventRegistration WHERE Event_Date > ?";
+                                    PreparedStatement statement = con.prepareStatement(query);
+                                    LocalDate currentDate = LocalDate.now();
+                                    String today = currentDate.toString();
+                                    statement.setString(1, today);
+                                    ResultSet resultSet = statement.executeQuery();
+                                %>
+                                <table id="upcoming-schedule-table" class="schedule-table table table-dark">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Date</th>
+                                            <th scope="col">Event</th>
+                                            <th scope="col">Time</th>
+                                            <th scope="col">Host / Organizer's</th>
+                                            <th scope="col">JOIN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% 
+                                        while (resultSet.next()) { 
+                                            String eventDay = resultSet.getString("Event_Date");
+                                            byte[] imageData = resultSet.getBytes("Event_Image");
+                                            String base64Image = Base64.getEncoder().encodeToString(imageData);
+                                            String imageSize = "cover"; 
+                                            int numColumns = 7;
+                                            int imageWidth = 100 / numColumns;
+                                        %>
+                                        <tr>
+                                            <td style="background-color: #FFFF; color: green; font-weight: bold;"><%= resultSet.getString("Event_Date") %></td>
+                                            <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>'); background-size: <%= imageSize %>; background-repeat: no-repeat; background-position: center; font-weight: bold; color: #FFFF; width: <%= imageWidth %>%;"><%= resultSet.getString("Event_Name") %></td>
+                                            <td style="background-color: #FFFF; color: red; font-weight: bold;"><%= resultSet.getString("Event_Timing") %></td>
+                                            <td style="background-color: #FFFF; color: black; font-weight: bold;"><%= resultSet.getString("Event_Host") %></td>
+                                            <td style="background-color: #FFFF; color: black; font-weight: bold;">
+												    <a href="ticket.jsp?Event_Name=<%= resultSet.getString("Event_Name") %>&Event_Date=<%= resultSet.getString("Event_Date") %>&Event_Timing=<%= resultSet.getString("Event_Timing") %>&Event_Host=<%= resultSet.getString("Event_Host") %>" class="btn btn-primary">Join Event</a>
+												</td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                                <%
+                                    resultSet.close();
+                                    statement.close();
+                                    con.close();
+                                } catch (SQLException | ClassNotFoundException e) {
+                                    e.printStackTrace();
+                                }
+                            %>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-pane fade" id="previous" role="tabpanel" aria-labelledby="previous-tab" style="background-color: rgba(39, 39, 39, 0.7);">
+                        <div class="table-responsive">
+                        	<%
+							    try {
+							        Class.forName("com.mysql.jdbc.Driver");
+							        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Event", "root", "Root@123");
+							        String query = "SELECT * FROM EventRegistration WHERE Event_Date < ?";
+							        PreparedStatement statement = con.prepareStatement(query);
+							        LocalDate currentDate = LocalDate.now();
+							        String today = currentDate.toString();
+							        statement.setString(1, today);
+							        ResultSet resultSet = statement.executeQuery();
+							    %>
+							    <table id="upcoming-schedule-table" class="schedule-table table table-dark">
+							        <thead>
+							            <tr>
+							                <th scope="col">Date</th>
+							                <th scope="col">Event</th>
+							                <th scope="col">Time</th>
+							                <th scope="col">Host / Organizer's</th>
+							                <th scope="col">JOIN</th>
+							            </tr>
+							        </thead>
+							        <tbody>
+							            <% 
+							            while (resultSet.next()) { 
+							                String eventDay = resultSet.getString("Event_Date");
+							                byte[] imageData = resultSet.getBytes("Event_Image");
+							                String base64Image = Base64.getEncoder().encodeToString(imageData);
+							                String imageSize = "cover"; 
+							                int numColumns = 7;
+							                int imageWidth = 100 / numColumns;
+							                
+							                // Check if event date is in the past
+							                LocalDate eventDate = LocalDate.parse(eventDay);
+							                boolean isPastEvent = eventDate.isBefore(currentDate);
+							            %>
+							            <tr>
+							                <td style="background-color: #FFFF; color: green; font-weight: bold;"><%= resultSet.getString("Event_Date") %></td>
+							                <td style="background-image: url('data:image/jpeg;base64,<%= base64Image %>'); background-size: <%= imageSize %>; background-repeat: no-repeat; background-position: center; font-weight: bold; color: #FFFF; width: <%= imageWidth %>%;"><%= resultSet.getString("Event_Name") %></td>
+							                <td style="background-color: #FFFF; color: red; font-weight: bold;"><%= resultSet.getString("Event_Timing") %></td>
+							                <td style="background-color: #FFFF; color: black; font-weight: bold;"><%= resultSet.getString("Event_Host") %></td>
+							                <td style="background-color: #FFFF; color: black; font-weight: bold;">
+							                    <% if (isPastEvent) { %>
+							                        <button class="btn btn-primary" disabled>Join Event</button>
+							                    <% } else { %>
+							                        <a href="ticket.jsp" class="btn btn-primary">Join Event</a>
+							                    <% } %>
+							                </td>
+							            </tr>
+							            <% } %>
+							        </tbody>
+							    </table>
+						    <%
+						        resultSet.close();
+						        statement.close();
+						        con.close();
+							    } catch (SQLException | ClassNotFoundException e) {
+							        e.printStackTrace();
+							    }
+							%>
+							<script>
+							    // Function to show popup message when disabled button is clicked
+							    document.querySelectorAll('.btn[disabled]').forEach(btn => {
+							        btn.addEventListener('click', function() {
+							            alert('The Meet/ Event you are trying to join has been ended by the host!!');
+							        });
+							    });
+							</script>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
+
 
 <!-- PLANS SECTION -->
-        <section class="pricing-section section-padding section-bg" id="section_5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-12 mx-auto">
-                        <h2 class="text-center mb-4">Plans, you' love</h2>
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="pricing-thumb">
-                            <div class="d-flex">
-                                <div>
-                                    <h3><small>Early Bird</small> $120</h3>
-                                    <p>Including good things:</p>
-                                </div>
-                                <p class="pricing-tag ms-auto">Save up to <span>50%</span></h2>
-                            </div>
+        <section class="sponsors-partners-section section-padding section-bg" id="section_5">
+			    <div class="container">
+			        <div class="row">
+			        <h2 class="text-center mb-5" style="color: ;">Our Sponsors and Partners</h2>
+			
+			    <div class="col-lg-4 col-md-6 col-12">
+				    <div class="text-center sponsor-card card" style="border-radius: 15px;">
+			            <div class="card-body" style = "background-color: #C34A36; border-radius: 15px;">
+				            <h5 class="card-title mb-3" style="color: white;">Gourav Kayarkar</h5>
+				            <p class="card-text" style="color: yellow;">The Founder of Kayarkar Corporation is a leading global technology company specializing in event management solutions. With innovative software tools and expert services, they help event organizers streamline operations and deliver exceptional attendee experiences.</p>
+				            <ul class="list-group list-group-flush">
+				                <li class="list-group-item" style = "background-color: #C34A36; font-weight: bold; color: #94bbe9;">Brand Exposure</li>
+				                <li class="list-group-item" style = "background-color: #C34A36; font-weight: bold; color: #94bbe9;">Personalized Support</li>
+				                <li class="list-group-item" style = "background-color: #C34A36; font-weight: bold; color: #94bbe9;">Proven Track Record</li>
+				            </ul>
+				            <a class="link-fx-1 color-contrast-higher mt-4" href="sponsor-page.html">
+					            <span style="color: white; font-weight: bold; font-weight: bold;">Learn More</span>
+					            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+					                <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+					                    <circle cx="16" cy="16" r="15.5"></circle>
+					                    <line x1="10" y1="18" x2="16" y2="12"></line>
+					                    <line x1="16" y1="12" x2="22" y2="18"></line>
+					                </g>
+					            </svg>
+				        	</a>
+				        </div>
+				    </div>
+			    </div>
+			    
+			  <div class="col-lg-4 col-md-6 col-12">
+			    <div class="text-center sponsor-card card" style="border-radius: 15px;">
+		            <div class="card-body" style = "background-color: #0B0051; border-radius: 15px;">
+				            <h5 class="card-title mb-3" style = "color: red; font-weight: bold;">Roshan Khandagale</h5>
+				            <p class="card-text" style="color: #fcb045;">The CEO & Founder of Khandagale Marketing Solutions is a full-service marketing agency specializing in event sponsorship and partnership management. They work closely with event organizers and brands to create mutually beneficial partnerships that drive engagement and achieve strategic objectives.</p>
+				            <ul class="list-group list-group-flush">
+				                <li class="list-group-item" style = "background-color: #0B0051; color: white; font-weight: bold;">Strategic Development</li>
+				                <li class="list-group-item" style = "background-color: #0B0051; color: white; font-weight: bold;">Promotion & Brand Activation</li>
+				                <li class="list-group-item" style = "background-color: #0B0051; color: white; font-weight: bold;">ROI Measurement and Analysis</li>
+				            </ul>
+				            <a class="link-fx-1 color-contrast-higher mt-4" href="sponsor-page.html">
+					            <span style="color: red; font-weight: bold; font-weight: bold;">Learn More</span>
+					            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+					                <g fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round">
+					                    <circle cx="16" cy="16" r="15.5"></circle>
+					                    <line x1="10" y1="18" x2="16" y2="12"></line>
+					                    <line x1="16" y1="12" x2="22" y2="18"></line>
+					                </g>
+					            </svg>
+				       		</a>
+			        </div>
+			    </div>
+			  </div>
+			    
+			    <div class="col-lg-4 col-md-6 col-12">
+			    <div class="text-center sponsor-card card" style="border-radius: 15px;">
+		            <div class="card-body" style = "background-color: #005B44; border-radius: 15px;">
+			            <h5 class="card-title mb-3" style="color: yellow;">Omkar Patankar</h5>
+			            <p class="card-text" style="color: white;">The Founder of Patankar EventPros Logistics is a premier logistics and production company specializing in event planning, management, and execution. From venue selection and setup to transportation and on-site coordination, they handle every aspect of event logistics with precision and expertise.</p>
+			            <ul class="list-group list-group-flush">
+			                <li class="list-group-item" style = "background-color: #005B44; color: #00d4ff; font-weight: bold;">Seamless Event Execution</li>
+			                <li class="list-group-item" style = "background-color: #005B44; color: #00d4ff; font-weight: bold;">Customized Solutions</li>
+			                <li class="list-group-item" style = "background-color: #005B44; color: #00d4ff; font-weight: bold;">Experienced Team Support</li>
+			            </ul>
+			            <a class="link-fx-1 color-contrast-higher mt-4" href="sponsor-page.html">
+			            <span style="color: yellow; font-weight: bold; font-weight: bold;">Learn More</span>
+			            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
+			                <g fill="none" stroke="yellow" stroke-linecap="round" stroke-linejoin="round">
+			                    <circle cx="16" cy="16" r="15.5"></circle>
+			                    <line x1="10" y1="18" x2="16" y2="12"></line>
+			                    <line x1="16" y1="12" x2="22" y2="18"></line>
+			                </g>
+			            </svg>
+			        </a>
+			        </div>
+			        </div>
+			    </div>
+			    
+			</div>
+        </div>
+</section>
 
-                            <ul class="pricing-list mt-3">
-                                <li class="pricing-list-item">Platform for Potential Customers</li>
-                                <li class="pricing-list-item">Digital Experience</li>
-                                <li class="pricing-list-item">Standard Content</li>
-                            </ul>
-                            <a class="link-fx-1 color-contrast-higher mt-4" href="ticket.jsp">
-                                <span>Buy Ticket</span>
-                                <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
-                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="16" cy="16" r="15.5"></circle>
-                                        <line x1="10" y1="18" x2="16" y2="12"></line>
-                                        <line x1="16" y1="12" x2="22" y2="18"></line>
-                                    </g>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-6 col-12 mt-4 mt-lg-0">
-                        <div class="pricing-thumb">
-                            <div class="d-flex">
-                                <div>
-                                    <h3><small>Standard</small> $240</h3>
-                                    <p>What makes a Premium Carnivals?</p>
-                                </div>
-                            </div>
-
-                            <ul class="pricing-list mt-3">
-                                <li class="pricing-list-item">Platform for Potential Customers</li>
-                                <li class="pricing-list-item">High-Quality Digital Experiences</li>
-                                <li class="pricing-list-item">Premium Content</li>
-                                <li class="pricing-list-item">Live Call + Chat Support</li>
-                            </ul>
-
-                            <a class="link-fx-1 color-contrast-higher mt-4" href="ticket.jsp">
-                                <span>Buy Ticket</span>
-                                <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
-                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="16" cy="16" r="15.5"></circle>
-                                        <line x1="10" y1="18" x2="16" y2="12"></line>
-                                        <line x1="16" y1="12" x2="22" y2="18"></line>
-                                    </g>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
 <!-- CONTACT FORM -->
         <section class="contact-section section-padding" id="section_6">
@@ -444,7 +651,7 @@
         <div class="site-footer-top">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-12">
+                    <div class="col-lg-4 col-10">
                         <h2 class="text-white mb-lg-0">Event Carnival Live</h2>
                     </div>
                     <div class="col-lg-6 col-12 d-flex justify-content-lg-end align-items-center">
@@ -498,6 +705,9 @@
                         <li class="site-footer-link-item">
                             <a href="#section_6" class="site-footer-link">Contact</a>
                         </li>
+                        <li class="site-footer-link-item">
+			                <a href="event.jsp" class="site-footer-link">Event Booking</a>
+			            </li>
                     </ul>
                 </div>
 
