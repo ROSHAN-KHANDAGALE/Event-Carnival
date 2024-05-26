@@ -1,0 +1,3 @@
+** VIRTUAL EVENT PLATFORM **
+
+* Abstract:
