@@ -137,7 +137,7 @@
 					                <input type="text" name="ticket-form-name" id="ticket-form-name" class="form-control" placeholder="Full name" style="color: black;" required />
 					            </div>
 					            <div class="col-lg-6 col-md-6 col-12">
-					                <input type="email" name="ticket-form-email" id="ticket-form-email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Email address (Optional)" style="color: black;" />
+					                <input type="email" name="ticket-form-email" id="ticket-form-email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Email address" style="color: black;" />
 					            </div>
 					        <div class="col-lg-6 col-md-6 col-12">
 			                  <input type="tel" class="form-control" name="ticket-form-phone" placeholder="Ph xxx-xxx-x890" pattern="[0-9]{10}" style="color: black;" required />
@@ -291,7 +291,7 @@
                 <a href="index.jsp#section_4" class="site-footer-link">Schedule</a>
               </li>
               <li class="site-footer-link-item">
-                <a href="index.jsp#section_5" class="site-footer-link">Pricing</a>
+                <a href="index.jsp#section_5" class="site-footer-link">Sponsor's</a>
               </li>
               <li class="site-footer-link-item">
                 <a href="index.jsp#section_6" class="site-footer-link">Contact</a>

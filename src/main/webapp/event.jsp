@@ -71,7 +71,6 @@
                 <a class="nav-link click-scroll" href="index.jsp#section_6">Contact</a>
               </li>
             </ul>
-            <a href="ticket.jsp" class="btn custom-btn d-lg-block d-none">Buy Ticket</a>
           </div>
         </div>
       </nav>
@@ -172,14 +171,12 @@
                 <a href="index.jsp#section_4" class="site-footer-link">Schedule</a>
               </li>
               <li class="site-footer-link-item">
-                <a href="index.jsp#section_5" class="site-footer-link">Pricing</a>
+                <a href="index.jsp#section_5" class="site-footer-link">Sponsor's</a>
               </li>
               <li class="site-footer-link-item">
                 <a href="index.jsp#section_6" class="site-footer-link">Contact</a>
               </li>
-              <li class="site-footer-link-item">
-                <a href="event.jsp" class="site-footer-link">Event Booking</a>
-              </li>
+              
             </ul>
           </div>
 

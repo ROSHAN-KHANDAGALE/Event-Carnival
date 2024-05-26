@@ -523,7 +523,7 @@
 				                <li class="list-group-item" style = "background-color: #C34A36; font-weight: bold; color: #94bbe9;">Personalized Support</li>
 				                <li class="list-group-item" style = "background-color: #C34A36; font-weight: bold; color: #94bbe9;">Proven Track Record</li>
 				            </ul>
-				            <a class="link-fx-1 color-contrast-higher mt-4" href="sponsor-page.html">
+				            <a class="link-fx-1 color-contrast-higher mt-4" href="index.jsp?#section_5">
 					            <span style="color: white; font-weight: bold; font-weight: bold;">Learn More</span>
 					            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
 					                <g fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round">
@@ -547,7 +547,7 @@
 				                <li class="list-group-item" style = "background-color: #0B0051; color: white; font-weight: bold;">Promotion & Brand Activation</li>
 				                <li class="list-group-item" style = "background-color: #0B0051; color: white; font-weight: bold;">ROI Measurement and Analysis</li>
 				            </ul>
-				            <a class="link-fx-1 color-contrast-higher mt-4" href="sponsor-page.html">
+				            <a class="link-fx-1 color-contrast-higher mt-4" href="index.jsp?#section_5">
 					            <span style="color: red; font-weight: bold; font-weight: bold;">Learn More</span>
 					            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
 					                <g fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round">
@@ -571,7 +571,7 @@
 			                <li class="list-group-item" style = "background-color: #005B44; color: #00d4ff; font-weight: bold;">Customized Solutions</li>
 			                <li class="list-group-item" style = "background-color: #005B44; color: #00d4ff; font-weight: bold;">Experienced Team Support</li>
 			            </ul>
-			            <a class="link-fx-1 color-contrast-higher mt-4" href="sponsor-page.html">
+			            <a class="link-fx-1 color-contrast-higher mt-4" href="index.jsp?#section_5">
 			            <span style="color: yellow; font-weight: bold; font-weight: bold;">Learn More</span>
 			            <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
 			                <g fill="none" stroke="yellow" stroke-linecap="round" stroke-linejoin="round">
@@ -700,14 +700,12 @@
                             <a href="#section_4" class="site-footer-link">Schedule</a>
                         </li>
                         <li class="site-footer-link-item">
-                            <a href="#section_5" class="site-footer-link">Pricing</a>
+                            <a href="#section_5" class="site-footer-link">Sponsor's</a>
                         </li>
                         <li class="site-footer-link-item">
                             <a href="#section_6" class="site-footer-link">Contact</a>
                         </li>
-                        <li class="site-footer-link-item">
-			                <a href="event.jsp" class="site-footer-link">Event Booking</a>
-			            </li>
+                    
                     </ul>
                 </div>
 
